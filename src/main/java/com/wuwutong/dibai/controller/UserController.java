@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wuwutong.dibai.common.ResponseResult;
 import com.wuwutong.dibai.enums.AuthStatus;
 import com.wuwutong.dibai.po.User;
 import com.wuwutong.dibai.service.SmsBiz;
 import com.wuwutong.dibai.service.UserBiz;
 import com.wuwutong.dibai.util.VerifyUtil;
 import com.wuwutong.dibai.vo.LoginForm;
-import com.wuwutong.dibai.vo.ResponseResult;
 
 @RestController
 @RequestMapping("/user")
