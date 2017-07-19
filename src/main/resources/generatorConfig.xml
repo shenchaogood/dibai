@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE generatorConfiguration 
+	PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+	"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd"> 
+<!-- mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate -->
+<generatorConfiguration>
+	<context id="testTables" defaultModelType="conditional" targetRuntime="MyBatis3">
+	    <property name="autoDelimitKeywords" value="false"/>
+	    <property name="javaFileEncoding" value="UTF-8"/>
+	    <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+	    <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+	    <property name="beginningDelimiter" value="`"/>
+	    <property name="endingDelimiter" value="`"/>
+		<!-- <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin" /> -->
+		<!-- <plugin type="org.mybatis.generator.plugins.RowLimitPlugin"/> -->
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+		<plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+		<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql:///dibai?characterEncoding=utf8" userId="root"
+			password="sc123+-*/">
+		</jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="com.wuwutong.dibai.po" targetProject="./src/main/java">
+			<property name="enableSubPackages" value="false" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="com.wuwutong.dibai.mapper" targetProject="./src/main/java">
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.wuwutong.dibai.mapper" targetProject="./src/main/java">
+			<property name="enableSubPackages" value="false" />
+		</javaClientGenerator>
+
+		<table tableName="t_user" mapperName="UserMapper" domainObjectName="User">
+			<generatedKey column="f_id" sqlStatement="MySql" identity="true" />
+			<columnRenamingRule searchString="^f_" replaceString="" />
+			<columnOverride column="f_auth_status" javaType="com.wuwutong.dibai.enums.AuthStatus"/>
+			<columnOverride column="f_use_status" javaType="com.wuwutong.dibai.enums.UseStatus"/> 
+		</table>
+		<table tableName="t_sms_identify" mapperName="SmsIdentifyMapper" domainObjectName="SmsIdentify">
+			<generatedKey column="f_id" sqlStatement="MySql" identity="true" />
+			<columnRenamingRule searchString="^f_" replaceString="" />
+			<columnOverride column="f_status" javaType="com.wuwutong.dibai.enums.SmsIdentifyCodeStatus"/>
+		</table>
+		<table tableName="t_sms_template" mapperName="SmsTemplateMapper" domainObjectName="SmsTemplate">
+			<generatedKey column="f_id" sqlStatement="MySql" identity="true" />
+			<columnRenamingRule searchString="^f_" replaceString="" />
+		</table>
+	</context>
+</generatorConfiguration>

@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuwutong.dibai.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.wuwutong.dibai.po.User">
+    <id column="f_id" jdbcType="BIGINT" property="id" />
+    <result column="f_identify_code" jdbcType="CHAR" property="identifyCode" />
+    <result column="f_id_number" jdbcType="CHAR" property="idNumber" />
+    <result column="f_mobile" jdbcType="CHAR" property="mobile" />
+    <result column="f_invitation_code" jdbcType="CHAR" property="invitationCode" />
+    <result column="f_register_time" jdbcType="TIMESTAMP" property="registerTime" />
+    <result column="f_auth_time" jdbcType="TIMESTAMP" property="authTime" />
+    <result column="f_auth_status" jdbcType="TINYINT" property="authStatus" />
+    <result column="f_use_status" jdbcType="TINYINT" property="useStatus" />
+    <result column="f_use_count" jdbcType="INTEGER" property="useCount" />
+    <result column="f_balance" jdbcType="INTEGER" property="balance" />
+    <result column="f_discount_coupon" jdbcType="INTEGER" property="discountCoupon" />
+    <result column="f_credit" jdbcType="INTEGER" property="credit" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    f_id, f_identify_code, f_id_number, f_mobile, f_invitation_code, f_register_time, 
+    f_auth_time, f_auth_status, f_use_status, f_use_count, f_balance, f_discount_coupon, 
+    f_credit
+  </sql>
+  <select id="selectByExample" parameterType="com.wuwutong.dibai.po.UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where f_id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_user
+    where f_id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wuwutong.dibai.po.UserExample">
+    delete from t_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wuwutong.dibai.po.User">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_user (f_identify_code, f_id_number, f_mobile, 
+      f_invitation_code, f_register_time, f_auth_time, 
+      f_auth_status, f_use_status, f_use_count, 
+      f_balance, f_discount_coupon, f_credit
+      )
+    values (#{identifyCode,jdbcType=CHAR}, #{idNumber,jdbcType=CHAR}, #{mobile,jdbcType=CHAR}, 
+      #{invitationCode,jdbcType=CHAR}, #{registerTime,jdbcType=TIMESTAMP}, #{authTime,jdbcType=TIMESTAMP}, 
+      #{authStatus,jdbcType=TINYINT}, #{useStatus,jdbcType=TINYINT}, #{useCount,jdbcType=INTEGER}, 
+      #{balance,jdbcType=INTEGER}, #{discountCoupon,jdbcType=INTEGER}, #{credit,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wuwutong.dibai.po.User">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="identifyCode != null">
+        f_identify_code,
+      </if>
+      <if test="idNumber != null">
+        f_id_number,
+      </if>
+      <if test="mobile != null">
+        f_mobile,
+      </if>
+      <if test="invitationCode != null">
+        f_invitation_code,
+      </if>
+      <if test="registerTime != null">
+        f_register_time,
+      </if>
+      <if test="authTime != null">
+        f_auth_time,
+      </if>
+      <if test="authStatus != null">
+        f_auth_status,
+      </if>
+      <if test="useStatus != null">
+        f_use_status,
+      </if>
+      <if test="useCount != null">
+        f_use_count,
+      </if>
+      <if test="balance != null">
+        f_balance,
+      </if>
+      <if test="discountCoupon != null">
+        f_discount_coupon,
+      </if>
+      <if test="credit != null">
+        f_credit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="identifyCode != null">
+        #{identifyCode,jdbcType=CHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=CHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=CHAR},
+      </if>
+      <if test="invitationCode != null">
+        #{invitationCode,jdbcType=CHAR},
+      </if>
+      <if test="registerTime != null">
+        #{registerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authTime != null">
+        #{authTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authStatus != null">
+        #{authStatus,jdbcType=TINYINT},
+      </if>
+      <if test="useStatus != null">
+        #{useStatus,jdbcType=TINYINT},
+      </if>
+      <if test="useCount != null">
+        #{useCount,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null">
+        #{balance,jdbcType=INTEGER},
+      </if>
+      <if test="discountCoupon != null">
+        #{discountCoupon,jdbcType=INTEGER},
+      </if>
+      <if test="credit != null">
+        #{credit,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wuwutong.dibai.po.UserExample" resultType="java.lang.Long">
+    select count(*) from t_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_user
+    <set>
+      <if test="record.id != null">
+        f_id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.identifyCode != null">
+        f_identify_code = #{record.identifyCode,jdbcType=CHAR},
+      </if>
+      <if test="record.idNumber != null">
+        f_id_number = #{record.idNumber,jdbcType=CHAR},
+      </if>
+      <if test="record.mobile != null">
+        f_mobile = #{record.mobile,jdbcType=CHAR},
+      </if>
+      <if test="record.invitationCode != null">
+        f_invitation_code = #{record.invitationCode,jdbcType=CHAR},
+      </if>
+      <if test="record.registerTime != null">
+        f_register_time = #{record.registerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.authTime != null">
+        f_auth_time = #{record.authTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.authStatus != null">
+        f_auth_status = #{record.authStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.useStatus != null">
+        f_use_status = #{record.useStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.useCount != null">
+        f_use_count = #{record.useCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.balance != null">
+        f_balance = #{record.balance,jdbcType=INTEGER},
+      </if>
+      <if test="record.discountCoupon != null">
+        f_discount_coupon = #{record.discountCoupon,jdbcType=INTEGER},
+      </if>
+      <if test="record.credit != null">
+        f_credit = #{record.credit,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_user
+    set f_id = #{record.id,jdbcType=BIGINT},
+      f_identify_code = #{record.identifyCode,jdbcType=CHAR},
+      f_id_number = #{record.idNumber,jdbcType=CHAR},
+      f_mobile = #{record.mobile,jdbcType=CHAR},
+      f_invitation_code = #{record.invitationCode,jdbcType=CHAR},
+      f_register_time = #{record.registerTime,jdbcType=TIMESTAMP},
+      f_auth_time = #{record.authTime,jdbcType=TIMESTAMP},
+      f_auth_status = #{record.authStatus,jdbcType=TINYINT},
+      f_use_status = #{record.useStatus,jdbcType=TINYINT},
+      f_use_count = #{record.useCount,jdbcType=INTEGER},
+      f_balance = #{record.balance,jdbcType=INTEGER},
+      f_discount_coupon = #{record.discountCoupon,jdbcType=INTEGER},
+      f_credit = #{record.credit,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wuwutong.dibai.po.User">
+    update t_user
+    <set>
+      <if test="identifyCode != null">
+        f_identify_code = #{identifyCode,jdbcType=CHAR},
+      </if>
+      <if test="idNumber != null">
+        f_id_number = #{idNumber,jdbcType=CHAR},
+      </if>
+      <if test="mobile != null">
+        f_mobile = #{mobile,jdbcType=CHAR},
+      </if>
+      <if test="invitationCode != null">
+        f_invitation_code = #{invitationCode,jdbcType=CHAR},
+      </if>
+      <if test="registerTime != null">
+        f_register_time = #{registerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authTime != null">
+        f_auth_time = #{authTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authStatus != null">
+        f_auth_status = #{authStatus,jdbcType=TINYINT},
+      </if>
+      <if test="useStatus != null">
+        f_use_status = #{useStatus,jdbcType=TINYINT},
+      </if>
+      <if test="useCount != null">
+        f_use_count = #{useCount,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null">
+        f_balance = #{balance,jdbcType=INTEGER},
+      </if>
+      <if test="discountCoupon != null">
+        f_discount_coupon = #{discountCoupon,jdbcType=INTEGER},
+      </if>
+      <if test="credit != null">
+        f_credit = #{credit,jdbcType=INTEGER},
+      </if>
+    </set>
+    where f_id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wuwutong.dibai.po.User">
+    update t_user
+    set f_identify_code = #{identifyCode,jdbcType=CHAR},
+      f_id_number = #{idNumber,jdbcType=CHAR},
+      f_mobile = #{mobile,jdbcType=CHAR},
+      f_invitation_code = #{invitationCode,jdbcType=CHAR},
+      f_register_time = #{registerTime,jdbcType=TIMESTAMP},
+      f_auth_time = #{authTime,jdbcType=TIMESTAMP},
+      f_auth_status = #{authStatus,jdbcType=TINYINT},
+      f_use_status = #{useStatus,jdbcType=TINYINT},
+      f_use_count = #{useCount,jdbcType=INTEGER},
+      f_balance = #{balance,jdbcType=INTEGER},
+      f_discount_coupon = #{discountCoupon,jdbcType=INTEGER},
+      f_credit = #{credit,jdbcType=INTEGER}
+    where f_id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
