@@ -15,4 +15,6 @@ public interface Constants {
 
 	String NO_PERMISION = "没有权限";
 	
+	String SMS_ARRIVED_QUERY_QUEUE_NAME="dibai.sms_arrived_queue";
+	
 }

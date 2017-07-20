@@ -15,7 +15,7 @@
 
 	<context:component-scan base-package="com.wuwutong.dibai.component"/>
 	<aop:aspectj-autoproxy/>
-  
+
   <!-- 
 	<bean id="oamDetectTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
 		<property name="jobDetail">

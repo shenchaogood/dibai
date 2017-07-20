@@ -66,19 +66,50 @@ public class SmsIdentifyExample {
     }
 
     protected abstract static class GeneratedCriteria {
+        protected List<Criterion> statusCriteria;
+
+        protected List<Criterion> allCriteria;
+
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
             super();
             criteria = new ArrayList<Criterion>();
+            statusCriteria = new ArrayList<Criterion>();
+        }
+
+        public List<Criterion> getStatusCriteria() {
+            return statusCriteria;
+        }
+
+        protected void addStatusCriterion(String condition, Object value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            statusCriteria.add(new Criterion(condition, value, "org.apache.ibatis.type.EnumOrdinalTypeHandler"));
+            allCriteria = null;
+        }
+
+        protected void addStatusCriterion(String condition, SmsIdentifyCodeStatus value1, SmsIdentifyCodeStatus value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            statusCriteria.add(new Criterion(condition, value1, value2, "org.apache.ibatis.type.EnumOrdinalTypeHandler"));
+            allCriteria = null;
         }
 
         public boolean isValid() {
-            return criteria.size() > 0;
+            return criteria.size() > 0
+                || statusCriteria.size() > 0;
         }
 
         public List<Criterion> getAllCriteria() {
-            return criteria;
+            if (allCriteria == null) {
+                allCriteria = new ArrayList<Criterion>();
+                allCriteria.addAll(criteria);
+                allCriteria.addAll(statusCriteria);
+            }
+            return allCriteria;
         }
 
         public List<Criterion> getCriteria() {
@@ -90,6 +121,7 @@ public class SmsIdentifyExample {
                 throw new RuntimeException("Value for condition cannot be null");
             }
             criteria.add(new Criterion(condition));
+            allCriteria = null;
         }
 
         protected void addCriterion(String condition, Object value, String property) {
@@ -97,6 +129,7 @@ public class SmsIdentifyExample {
                 throw new RuntimeException("Value for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value));
+            allCriteria = null;
         }
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
@@ -104,6 +137,7 @@ public class SmsIdentifyExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
+            allCriteria = null;
         }
 
         public Criteria andIdIsNull() {
@@ -787,52 +821,52 @@ public class SmsIdentifyExample {
         }
 
         public Criteria andStatusEqualTo(SmsIdentifyCodeStatus value) {
-            addCriterion("f_status =", value, "status");
+            addStatusCriterion("f_status =", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotEqualTo(SmsIdentifyCodeStatus value) {
-            addCriterion("f_status <>", value, "status");
+            addStatusCriterion("f_status <>", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusGreaterThan(SmsIdentifyCodeStatus value) {
-            addCriterion("f_status >", value, "status");
+            addStatusCriterion("f_status >", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusGreaterThanOrEqualTo(SmsIdentifyCodeStatus value) {
-            addCriterion("f_status >=", value, "status");
+            addStatusCriterion("f_status >=", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusLessThan(SmsIdentifyCodeStatus value) {
-            addCriterion("f_status <", value, "status");
+            addStatusCriterion("f_status <", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusLessThanOrEqualTo(SmsIdentifyCodeStatus value) {
-            addCriterion("f_status <=", value, "status");
+            addStatusCriterion("f_status <=", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusIn(List<SmsIdentifyCodeStatus> values) {
-            addCriterion("f_status in", values, "status");
+            addStatusCriterion("f_status in", values, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotIn(List<SmsIdentifyCodeStatus> values) {
-            addCriterion("f_status not in", values, "status");
+            addStatusCriterion("f_status not in", values, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusBetween(SmsIdentifyCodeStatus value1, SmsIdentifyCodeStatus value2) {
-            addCriterion("f_status between", value1, value2, "status");
+            addStatusCriterion("f_status between", value1, value2, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotBetween(SmsIdentifyCodeStatus value1, SmsIdentifyCodeStatus value2) {
-            addCriterion("f_status not between", value1, value2, "status");
+            addStatusCriterion("f_status not between", value1, value2, "status");
             return (Criteria) this;
         }
     }

@@ -107,24 +107,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.wuwutong.dibai.po.SmsTemplate">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_sms_template (f_product_type, f_addr, f_title, 
-      f_signature, f_template_content, f_status_code, 
-      f_template_id, f_create_time, f_response_time, 
-      f_status)
-    values (#{productType,jdbcType=CHAR}, #{addr,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{signature,jdbcType=VARCHAR}, #{templateContent,jdbcType=VARCHAR}, #{statusCode,jdbcType=CHAR}, 
-      #{templateId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{responseTime,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=TINYINT})
+    insert into t_sms_template (f_id, f_product_type, f_addr, 
+      f_title, f_signature, f_template_content, 
+      f_status_code, f_template_id, f_create_time, 
+      f_response_time, f_status)
+    values (#{id,jdbcType=BIGINT}, #{productType,jdbcType=CHAR}, #{addr,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{signature,jdbcType=VARCHAR}, #{templateContent,jdbcType=VARCHAR}, 
+      #{statusCode,jdbcType=CHAR}, #{templateId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{responseTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.wuwutong.dibai.po.SmsTemplate">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into t_sms_template
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        f_id,
+      </if>
       <if test="productType != null">
         f_product_type,
       </if>
@@ -157,6 +154,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
       <if test="productType != null">
         #{productType,jdbcType=CHAR},
       </if>

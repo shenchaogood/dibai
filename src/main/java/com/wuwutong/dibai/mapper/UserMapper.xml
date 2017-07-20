@@ -9,8 +9,8 @@
     <result column="f_invitation_code" jdbcType="CHAR" property="invitationCode" />
     <result column="f_register_time" jdbcType="TIMESTAMP" property="registerTime" />
     <result column="f_auth_time" jdbcType="TIMESTAMP" property="authTime" />
-    <result column="f_auth_status" jdbcType="TINYINT" property="authStatus" />
-    <result column="f_use_status" jdbcType="TINYINT" property="useStatus" />
+    <result column="f_auth_status" jdbcType="TINYINT" property="authStatus" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+    <result column="f_use_status" jdbcType="TINYINT" property="useStatus" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
     <result column="f_use_count" jdbcType="INTEGER" property="useCount" />
     <result column="f_balance" jdbcType="INTEGER" property="balance" />
     <result column="f_discount_coupon" jdbcType="INTEGER" property="discountCoupon" />
@@ -40,6 +40,44 @@
                 </when>
               </choose>
             </foreach>
+            <foreach collection="criteria.authStatusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.useStatusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
           </trim>
         </if>
       </foreach>
@@ -65,6 +103,44 @@
                   and ${criterion.condition}
                   <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.authStatusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.useStatusCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
                   </foreach>
                 </when>
               </choose>
@@ -110,26 +186,25 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.wuwutong.dibai.po.User">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_user (f_identify_code, f_id_number, f_mobile, 
-      f_invitation_code, f_register_time, f_auth_time, 
-      f_auth_status, f_use_status, f_use_count, 
-      f_balance, f_discount_coupon, f_credit
-      )
-    values (#{identifyCode,jdbcType=CHAR}, #{idNumber,jdbcType=CHAR}, #{mobile,jdbcType=CHAR}, 
-      #{invitationCode,jdbcType=CHAR}, #{registerTime,jdbcType=TIMESTAMP}, #{authTime,jdbcType=TIMESTAMP}, 
-      #{authStatus,jdbcType=TINYINT}, #{useStatus,jdbcType=TINYINT}, #{useCount,jdbcType=INTEGER}, 
-      #{balance,jdbcType=INTEGER}, #{discountCoupon,jdbcType=INTEGER}, #{credit,jdbcType=INTEGER}
-      )
+    insert into t_user (f_id, f_identify_code, f_id_number, 
+      f_mobile, f_invitation_code, f_register_time, 
+      f_auth_time, f_auth_status, 
+      f_use_status, 
+      f_use_count, f_balance, f_discount_coupon, 
+      f_credit)
+    values (#{id,jdbcType=BIGINT}, #{identifyCode,jdbcType=CHAR}, #{idNumber,jdbcType=CHAR}, 
+      #{mobile,jdbcType=CHAR}, #{invitationCode,jdbcType=CHAR}, #{registerTime,jdbcType=TIMESTAMP}, 
+      #{authTime,jdbcType=TIMESTAMP}, #{authStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}, 
+      #{useStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}, 
+      #{useCount,jdbcType=INTEGER}, #{balance,jdbcType=INTEGER}, #{discountCoupon,jdbcType=INTEGER}, 
+      #{credit,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.wuwutong.dibai.po.User">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into t_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        f_id,
+      </if>
       <if test="identifyCode != null">
         f_identify_code,
       </if>
@@ -168,6 +243,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
       <if test="identifyCode != null">
         #{identifyCode,jdbcType=CHAR},
       </if>
@@ -187,10 +265,10 @@
         #{authTime,jdbcType=TIMESTAMP},
       </if>
       <if test="authStatus != null">
-        #{authStatus,jdbcType=TINYINT},
+        #{authStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
       </if>
       <if test="useStatus != null">
-        #{useStatus,jdbcType=TINYINT},
+        #{useStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
       </if>
       <if test="useCount != null">
         #{useCount,jdbcType=INTEGER},
@@ -237,10 +315,10 @@
         f_auth_time = #{record.authTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.authStatus != null">
-        f_auth_status = #{record.authStatus,jdbcType=TINYINT},
+        f_auth_status = #{record.authStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
       </if>
       <if test="record.useStatus != null">
-        f_use_status = #{record.useStatus,jdbcType=TINYINT},
+        f_use_status = #{record.useStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
       </if>
       <if test="record.useCount != null">
         f_use_count = #{record.useCount,jdbcType=INTEGER},
@@ -268,8 +346,8 @@
       f_invitation_code = #{record.invitationCode,jdbcType=CHAR},
       f_register_time = #{record.registerTime,jdbcType=TIMESTAMP},
       f_auth_time = #{record.authTime,jdbcType=TIMESTAMP},
-      f_auth_status = #{record.authStatus,jdbcType=TINYINT},
-      f_use_status = #{record.useStatus,jdbcType=TINYINT},
+      f_auth_status = #{record.authStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
+      f_use_status = #{record.useStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
       f_use_count = #{record.useCount,jdbcType=INTEGER},
       f_balance = #{record.balance,jdbcType=INTEGER},
       f_discount_coupon = #{record.discountCoupon,jdbcType=INTEGER},
@@ -300,10 +378,10 @@
         f_auth_time = #{authTime,jdbcType=TIMESTAMP},
       </if>
       <if test="authStatus != null">
-        f_auth_status = #{authStatus,jdbcType=TINYINT},
+        f_auth_status = #{authStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
       </if>
       <if test="useStatus != null">
-        f_use_status = #{useStatus,jdbcType=TINYINT},
+        f_use_status = #{useStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
       </if>
       <if test="useCount != null">
         f_use_count = #{useCount,jdbcType=INTEGER},
@@ -328,8 +406,8 @@
       f_invitation_code = #{invitationCode,jdbcType=CHAR},
       f_register_time = #{registerTime,jdbcType=TIMESTAMP},
       f_auth_time = #{authTime,jdbcType=TIMESTAMP},
-      f_auth_status = #{authStatus,jdbcType=TINYINT},
-      f_use_status = #{useStatus,jdbcType=TINYINT},
+      f_auth_status = #{authStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
+      f_use_status = #{useStatus,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
       f_use_count = #{useCount,jdbcType=INTEGER},
       f_balance = #{balance,jdbcType=INTEGER},
       f_discount_coupon = #{discountCoupon,jdbcType=INTEGER},

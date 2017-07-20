@@ -4,6 +4,7 @@ import java.io.InterruptedIOException;
 import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,6 +44,8 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 
@@ -64,6 +67,7 @@ public class HttpClientUtil {
 		}
 	}
 
+	private static final Logger LOGGER =LoggerFactory.getLogger(HttpClientUtil.class);
     private static final int TIMEOUT = 10 * 1000;
     private static CloseableHttpClient httpClient = null;
     private final static Object SYN_CLOCK = new Object();
@@ -191,25 +195,7 @@ public class HttpClientUtil {
         HttpPost httppost = new HttpPost(url);
         config(httppost,headers,requestConfig);
         setPostParams(httppost, params);
-        CloseableHttpResponse response = null;
-        try {
-            response = getHttpClient(url).execute(httppost,HttpClientContext.create());
-            int statusCode=response.getStatusLine().getStatusCode();
-            HttpEntity entity = response.getEntity();
-            String content = EntityUtils.toString(entity,CHARSET);
-            EntityUtils.consume(entity);
-            return new HttpResult(statusCode, content);
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            try {
-                if (response != null){
-                	response.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        return doRequest(url, httppost);
     }
     
     /**
@@ -220,12 +206,26 @@ public class HttpClientUtil {
         HttpPost httppost = new HttpPost(url);
         config(httppost,headers,requestConfig);
         setPostParams(httppost, stringEntity);
-        CloseableHttpResponse response = null;
-        try {
-            response = getHttpClient(url).execute(httppost,HttpClientContext.create());
+        return doRequest(url, httppost);
+    }
+
+	private static HttpResult doRequest(String url, HttpRequestBase httpbase)
+			throws IOException {
+		CloseableHttpResponse response = null;
+		try {
+        	LOGGER.debug("{}",httpbase);
+        	LOGGER.debug("{}",Arrays.toString(httpbase.getAllHeaders()));
+        	if(httpbase instanceof HttpPost){
+        		HttpPost httppost=(HttpPost)httpbase;
+        		LOGGER.debug("{}",httppost.getEntity());
+        		LOGGER.debug("{}",EntityUtils.toString(httppost.getEntity()));
+        	}
+            response = getHttpClient(url).execute(httpbase,HttpClientContext.create());
+            LOGGER.debug("{}",response);
             int statusCode=response.getStatusLine().getStatusCode();
             HttpEntity entity = response.getEntity();
             String content = EntityUtils.toString(entity,CHARSET);
+            LOGGER.debug("{}",content);
             EntityUtils.consume(entity);
             return new HttpResult(statusCode, content);
         } catch (Exception e) {
@@ -239,7 +239,7 @@ public class HttpClientUtil {
                 e.printStackTrace();
             }
         }
-    }
+	}
     
 
     /**
@@ -248,24 +248,7 @@ public class HttpClientUtil {
     public static HttpResult get(String url, Map<String, Object> params,Map<String,String> headers,RequestConfig requestConfig) throws IOException{
         HttpGet httpget = new HttpGet(url);
         config(httpget,headers,requestConfig);
-        CloseableHttpResponse response = null;
-        try {
-            response = getHttpClient(url).execute(httpget,HttpClientContext.create());
-            int statusCode=response.getStatusLine().getStatusCode();
-            HttpEntity entity = response.getEntity();
-            String content = EntityUtils.toString(entity, CHARSET);
-            EntityUtils.consume(entity);
-            return new HttpResult(statusCode, content);
-        } catch (IOException e) {
-        	throw e;
-        } finally {
-            try {
-                if (response != null)
-                    response.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        return doRequest(url, httpget);
     }
 
 }

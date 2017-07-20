@@ -17,8 +17,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wuwutong.dibai.common.DataTableParam;
 import com.wuwutong.dibai.common.DataTableResult;
+import com.wuwutong.dibai.common.ResponseResult;
 import com.wuwutong.dibai.util.Constants;
-import com.wuwutong.dibai.vo.ResponseResult;
 
 
 @Transactional(rollbackFor=Exception.class)
@@ -61,6 +61,7 @@ public abstract class BaseBiz<PO,MAPPER> {
 			effectRow = (Integer)mapperClass.getMethod("insertSelective", po.getClass()).invoke(mapper, po);
 			return effectRow>0?ResponseResult.createSuccess():ResponseResult.createFail(Constants.RECORD_EXISTS);
 		} catch (Exception e) {
+			LOGGER.error(ExceptionUtils.getStackTrace(e));
 			return ResponseResult.createFail(e.getMessage());
 		}
 	}

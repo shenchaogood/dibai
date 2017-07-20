@@ -40,18 +40,15 @@
 		</javaClientGenerator>
 
 		<table tableName="t_user" mapperName="UserMapper" domainObjectName="User">
-			<generatedKey column="f_id" sqlStatement="MySql" identity="true" />
 			<columnRenamingRule searchString="^f_" replaceString="" />
-			<columnOverride column="f_auth_status" javaType="com.wuwutong.dibai.enums.AuthStatus"/>
-			<columnOverride column="f_use_status" javaType="com.wuwutong.dibai.enums.UseStatus"/> 
+			<columnOverride column="f_auth_status" javaType="com.wuwutong.dibai.enums.AuthStatus" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
+			<columnOverride column="f_use_status" javaType="com.wuwutong.dibai.enums.UseStatus" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/> 
 		</table>
 		<table tableName="t_sms_identify" mapperName="SmsIdentifyMapper" domainObjectName="SmsIdentify">
-			<generatedKey column="f_id" sqlStatement="MySql" identity="true" />
 			<columnRenamingRule searchString="^f_" replaceString="" />
-			<columnOverride column="f_status" javaType="com.wuwutong.dibai.enums.SmsIdentifyCodeStatus"/>
+			<columnOverride column="f_status" javaType="com.wuwutong.dibai.enums.SmsIdentifyCodeStatus" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
 		</table>
 		<table tableName="t_sms_template" mapperName="SmsTemplateMapper" domainObjectName="SmsTemplate">
-			<generatedKey column="f_id" sqlStatement="MySql" identity="true" />
 			<columnRenamingRule searchString="^f_" replaceString="" />
 		</table>
 	</context>

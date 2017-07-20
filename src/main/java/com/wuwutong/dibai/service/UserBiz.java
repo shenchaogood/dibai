@@ -3,11 +3,11 @@ package com.wuwutong.dibai.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wuwutong.dibai.common.ResponseResult;
 import com.wuwutong.dibai.mapper.UserMapper;
 import com.wuwutong.dibai.po.User;
 import com.wuwutong.dibai.po.UserExample;
 import com.wuwutong.dibai.util.IDGenerator;
-import com.wuwutong.dibai.vo.ResponseResult;
 
 @Service
 public class UserBiz extends BaseBiz<User, UserMapper>{

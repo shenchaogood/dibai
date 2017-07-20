@@ -67,19 +67,75 @@ public class UserExample {
     }
 
     protected abstract static class GeneratedCriteria {
+        protected List<Criterion> authStatusCriteria;
+
+        protected List<Criterion> useStatusCriteria;
+
+        protected List<Criterion> allCriteria;
+
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
             super();
             criteria = new ArrayList<Criterion>();
+            authStatusCriteria = new ArrayList<Criterion>();
+            useStatusCriteria = new ArrayList<Criterion>();
+        }
+
+        public List<Criterion> getAuthStatusCriteria() {
+            return authStatusCriteria;
+        }
+
+        protected void addAuthStatusCriterion(String condition, Object value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            authStatusCriteria.add(new Criterion(condition, value, "org.apache.ibatis.type.EnumOrdinalTypeHandler"));
+            allCriteria = null;
+        }
+
+        protected void addAuthStatusCriterion(String condition, AuthStatus value1, AuthStatus value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            authStatusCriteria.add(new Criterion(condition, value1, value2, "org.apache.ibatis.type.EnumOrdinalTypeHandler"));
+            allCriteria = null;
+        }
+
+        public List<Criterion> getUseStatusCriteria() {
+            return useStatusCriteria;
+        }
+
+        protected void addUseStatusCriterion(String condition, Object value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            useStatusCriteria.add(new Criterion(condition, value, "org.apache.ibatis.type.EnumOrdinalTypeHandler"));
+            allCriteria = null;
+        }
+
+        protected void addUseStatusCriterion(String condition, UseStatus value1, UseStatus value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            useStatusCriteria.add(new Criterion(condition, value1, value2, "org.apache.ibatis.type.EnumOrdinalTypeHandler"));
+            allCriteria = null;
         }
 
         public boolean isValid() {
-            return criteria.size() > 0;
+            return criteria.size() > 0
+                || authStatusCriteria.size() > 0
+                || useStatusCriteria.size() > 0;
         }
 
         public List<Criterion> getAllCriteria() {
-            return criteria;
+            if (allCriteria == null) {
+                allCriteria = new ArrayList<Criterion>();
+                allCriteria.addAll(criteria);
+                allCriteria.addAll(authStatusCriteria);
+                allCriteria.addAll(useStatusCriteria);
+            }
+            return allCriteria;
         }
 
         public List<Criterion> getCriteria() {
@@ -91,6 +147,7 @@ public class UserExample {
                 throw new RuntimeException("Value for condition cannot be null");
             }
             criteria.add(new Criterion(condition));
+            allCriteria = null;
         }
 
         protected void addCriterion(String condition, Object value, String property) {
@@ -98,6 +155,7 @@ public class UserExample {
                 throw new RuntimeException("Value for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value));
+            allCriteria = null;
         }
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
@@ -105,6 +163,7 @@ public class UserExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
+            allCriteria = null;
         }
 
         public Criteria andIdIsNull() {
@@ -578,52 +637,52 @@ public class UserExample {
         }
 
         public Criteria andAuthStatusEqualTo(AuthStatus value) {
-            addCriterion("f_auth_status =", value, "authStatus");
+            addAuthStatusCriterion("f_auth_status =", value, "authStatus");
             return (Criteria) this;
         }
 
         public Criteria andAuthStatusNotEqualTo(AuthStatus value) {
-            addCriterion("f_auth_status <>", value, "authStatus");
+            addAuthStatusCriterion("f_auth_status <>", value, "authStatus");
             return (Criteria) this;
         }
 
         public Criteria andAuthStatusGreaterThan(AuthStatus value) {
-            addCriterion("f_auth_status >", value, "authStatus");
+            addAuthStatusCriterion("f_auth_status >", value, "authStatus");
             return (Criteria) this;
         }
 
         public Criteria andAuthStatusGreaterThanOrEqualTo(AuthStatus value) {
-            addCriterion("f_auth_status >=", value, "authStatus");
+            addAuthStatusCriterion("f_auth_status >=", value, "authStatus");
             return (Criteria) this;
         }
 
         public Criteria andAuthStatusLessThan(AuthStatus value) {
-            addCriterion("f_auth_status <", value, "authStatus");
+            addAuthStatusCriterion("f_auth_status <", value, "authStatus");
             return (Criteria) this;
         }
 
         public Criteria andAuthStatusLessThanOrEqualTo(AuthStatus value) {
-            addCriterion("f_auth_status <=", value, "authStatus");
+            addAuthStatusCriterion("f_auth_status <=", value, "authStatus");
             return (Criteria) this;
         }
 
         public Criteria andAuthStatusIn(List<AuthStatus> values) {
-            addCriterion("f_auth_status in", values, "authStatus");
+            addAuthStatusCriterion("f_auth_status in", values, "authStatus");
             return (Criteria) this;
         }
 
         public Criteria andAuthStatusNotIn(List<AuthStatus> values) {
-            addCriterion("f_auth_status not in", values, "authStatus");
+            addAuthStatusCriterion("f_auth_status not in", values, "authStatus");
             return (Criteria) this;
         }
 
         public Criteria andAuthStatusBetween(AuthStatus value1, AuthStatus value2) {
-            addCriterion("f_auth_status between", value1, value2, "authStatus");
+            addAuthStatusCriterion("f_auth_status between", value1, value2, "authStatus");
             return (Criteria) this;
         }
 
         public Criteria andAuthStatusNotBetween(AuthStatus value1, AuthStatus value2) {
-            addCriterion("f_auth_status not between", value1, value2, "authStatus");
+            addAuthStatusCriterion("f_auth_status not between", value1, value2, "authStatus");
             return (Criteria) this;
         }
 
@@ -638,52 +697,52 @@ public class UserExample {
         }
 
         public Criteria andUseStatusEqualTo(UseStatus value) {
-            addCriterion("f_use_status =", value, "useStatus");
+            addUseStatusCriterion("f_use_status =", value, "useStatus");
             return (Criteria) this;
         }
 
         public Criteria andUseStatusNotEqualTo(UseStatus value) {
-            addCriterion("f_use_status <>", value, "useStatus");
+            addUseStatusCriterion("f_use_status <>", value, "useStatus");
             return (Criteria) this;
         }
 
         public Criteria andUseStatusGreaterThan(UseStatus value) {
-            addCriterion("f_use_status >", value, "useStatus");
+            addUseStatusCriterion("f_use_status >", value, "useStatus");
             return (Criteria) this;
         }
 
         public Criteria andUseStatusGreaterThanOrEqualTo(UseStatus value) {
-            addCriterion("f_use_status >=", value, "useStatus");
+            addUseStatusCriterion("f_use_status >=", value, "useStatus");
             return (Criteria) this;
         }
 
         public Criteria andUseStatusLessThan(UseStatus value) {
-            addCriterion("f_use_status <", value, "useStatus");
+            addUseStatusCriterion("f_use_status <", value, "useStatus");
             return (Criteria) this;
         }
 
         public Criteria andUseStatusLessThanOrEqualTo(UseStatus value) {
-            addCriterion("f_use_status <=", value, "useStatus");
+            addUseStatusCriterion("f_use_status <=", value, "useStatus");
             return (Criteria) this;
         }
 
         public Criteria andUseStatusIn(List<UseStatus> values) {
-            addCriterion("f_use_status in", values, "useStatus");
+            addUseStatusCriterion("f_use_status in", values, "useStatus");
             return (Criteria) this;
         }
 
         public Criteria andUseStatusNotIn(List<UseStatus> values) {
-            addCriterion("f_use_status not in", values, "useStatus");
+            addUseStatusCriterion("f_use_status not in", values, "useStatus");
             return (Criteria) this;
         }
 
         public Criteria andUseStatusBetween(UseStatus value1, UseStatus value2) {
-            addCriterion("f_use_status between", value1, value2, "useStatus");
+            addUseStatusCriterion("f_use_status between", value1, value2, "useStatus");
             return (Criteria) this;
         }
 
         public Criteria andUseStatusNotBetween(UseStatus value1, UseStatus value2) {
-            addCriterion("f_use_status not between", value1, value2, "useStatus");
+            addUseStatusCriterion("f_use_status not between", value1, value2, "useStatus");
             return (Criteria) this;
         }
 
