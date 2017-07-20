@@ -34,5 +34,5 @@
     	<property name="connectionFactory" ref="connectionFactory"/>
 	</bean>
     <!-- 默认是使用jmsListenerContainerFactory，所以配置中可以不用指定 -->
-	<jms:annotation-driven>
+	<jms:annotation-driven/>
 </beans>

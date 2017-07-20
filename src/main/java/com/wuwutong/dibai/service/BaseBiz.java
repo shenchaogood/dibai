@@ -38,19 +38,29 @@ public abstract class BaseBiz<PO,MAPPER> {
 		mapperExampleClass=Class.forName(mapperExampleName);
 	}
 	
-	protected ResponseResult checkAddParam(PO po){
+	protected ResponseResult<?> checkAddParam(PO po){
 		return ResponseResult.createSuccess();
 	}
 	
-	protected ResponseResult checkUpdateParam(PO po){
+	protected ResponseResult<?> checkUpdateParam(PO po){
 		return ResponseResult.createSuccess();
 	}
 	
-	protected ResponseResult checkDeleteParam(Serializable... ids){
+	protected ResponseResult<?> checkDeleteParam(Serializable... ids){
 		return ResponseResult.createSuccess();
 	}
 	
-	public ResponseResult add(PO po) {
+	@SuppressWarnings("unchecked")
+	public ResponseResult<PO> findById(Long id){
+		try {
+			return ResponseResult.<PO>createSuccess().setData((PO)mapperClass.getMethod("selectByPrimaryKey").invoke(mapper, id));
+		} catch (Exception e) {
+			LOGGER.error(ExceptionUtils.getStackTrace(e));
+			return ResponseResult.createFail(e.getLocalizedMessage());
+		}
+	}
+	
+	public ResponseResult<PO> add(PO po) {
 		ResponseResult ret=checkAddParam(po);
 		if(!ret.isSuccess()){
 			return ret;
@@ -75,7 +85,7 @@ public abstract class BaseBiz<PO,MAPPER> {
 			int effectRow = (Integer)mapperClass.getMethod("updateByExampleSelective", po.getClass()).invoke(mapper, po);
 			return effectRow>0?ResponseResult.createSuccess():ResponseResult.createFail(Constants.RECORD_EXISTS);
 		} catch (Exception e) {
-			ExceptionUtils.rethrow(e);
+			LOGGER.error(ExceptionUtils.getStackTrace(e));
 			return ResponseResult.createFail(e.getMessage());
 		}
 	}

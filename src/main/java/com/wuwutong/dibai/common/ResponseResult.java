@@ -2,18 +2,18 @@ package com.wuwutong.dibai.common;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-public class ResponseResult {
+public class ResponseResult<T> {
 	
-	public static ResponseResult createSuccess(String...desc){
-		return new ResponseResult(true).setDesc(ArrayUtils.isEmpty(desc)?"":desc[0]);
+	public static <T> ResponseResult<T> createSuccess(String...desc){
+		return new ResponseResult<T>(true).setDesc(ArrayUtils.isEmpty(desc)?"":desc[0]);
 	}
 	
-	public static ResponseResult createFail(String...desc){
-		return new ResponseResult(false).setDesc(ArrayUtils.isEmpty(desc)?"":desc[0]);
+	public static <T> ResponseResult<T> createFail(String...desc){
+		return new ResponseResult<T>(false).setDesc(ArrayUtils.isEmpty(desc)?"":desc[0]);
 	}
 	
-	public static ResponseResult create(boolean success,String...desc){
-		return new ResponseResult(success).setDesc(ArrayUtils.isEmpty(desc)?"":desc[0]);
+	public static <T> ResponseResult<T> create(boolean success,String...desc){
+		return new ResponseResult<T>(success).setDesc(ArrayUtils.isEmpty(desc)?"":desc[0]);
 	}
 	
 	private ResponseResult() {
@@ -27,13 +27,13 @@ public class ResponseResult {
 	
 	private String desc;
 	
-	private Object data;
+	private T data;
 
-	public Object getData() {
+	public T getData() {
 		return data;
 	}
 
-	public ResponseResult setData(Object data) {
+	public ResponseResult<T> setData(T data) {
 		this.data = data;
 		return this;
 	}
@@ -42,7 +42,7 @@ public class ResponseResult {
 		return success;
 	}
 
-	public ResponseResult setSuccess(boolean success) {
+	public ResponseResult<T> setSuccess(boolean success) {
 		this.success = success;
 		return this;
 	}
@@ -51,7 +51,7 @@ public class ResponseResult {
 		return desc;
 	}
 
-	public ResponseResult setDesc(String desc) {
+	public ResponseResult<T> setDesc(String desc) {
 		this.desc = desc;
 		return this;
 	}

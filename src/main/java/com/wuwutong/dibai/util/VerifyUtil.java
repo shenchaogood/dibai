@@ -123,5 +123,9 @@ public abstract class VerifyUtil {
     public static boolean isIPAddr(String ipAddr) {
         return Pattern.matches(REGEX_IP_ADDR, ipAddr);
     }
+    
+    public static boolean isNumber(String number){
+    	return Pattern.matches("^\\d+$", number);
+    }
 
 }
