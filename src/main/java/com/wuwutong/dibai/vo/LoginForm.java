@@ -5,6 +5,7 @@ public class LoginForm {
 	private String mobile;
 	private String identifyCode;
 	private String invitationCode;
+	private String identifyCodeId;
 	public String getMobile() {
 		return mobile;
 	}
@@ -23,5 +24,10 @@ public class LoginForm {
 	public void setInvitationCode(String invitationCode) {
 		this.invitationCode = invitationCode;
 	}
-
+	public String getIdentifyCodeId() {
+		return identifyCodeId;
+	}
+	public void setIdentifyCodeId(String identifyCodeId) {
+		this.identifyCodeId = identifyCodeId;
+	}
 }

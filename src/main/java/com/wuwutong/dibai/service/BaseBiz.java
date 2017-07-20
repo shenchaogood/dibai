@@ -38,20 +38,30 @@ public abstract class BaseBiz<PO,MAPPER> {
 		mapperExampleClass=Class.forName(mapperExampleName);
 	}
 	
-	protected ResponseResult checkAddParam(PO po){
+	protected ResponseResult<PO> checkAddParam(PO po){
 		return ResponseResult.createSuccess();
 	}
 	
-	protected ResponseResult checkUpdateParam(PO po){
+	protected ResponseResult<PO> checkUpdateParam(PO po){
 		return ResponseResult.createSuccess();
 	}
 	
-	protected ResponseResult checkDeleteParam(Serializable... ids){
+	protected ResponseResult<PO> checkDeleteParam(Serializable... ids){
 		return ResponseResult.createSuccess();
 	}
 	
-	public ResponseResult add(PO po) {
-		ResponseResult ret=checkAddParam(po);
+	@SuppressWarnings("unchecked")
+	public ResponseResult<PO> findById(Long id){
+		try {
+			return ResponseResult.<PO>createSuccess().setData((PO)mapperClass.getMethod("selectByPrimaryKey",Long.class).invoke(mapper, id));
+		} catch (Exception e) {
+			LOGGER.error(ExceptionUtils.getStackTrace(e));
+			return ResponseResult.createFail(e.getLocalizedMessage());
+		}
+	}
+	
+	public ResponseResult<PO> add(PO po) {
+		ResponseResult<PO> ret=checkAddParam(po);
 		if(!ret.isSuccess()){
 			return ret;
 		}
@@ -66,22 +76,22 @@ public abstract class BaseBiz<PO,MAPPER> {
 		}
 	}
 	
-	public ResponseResult update(PO po) {
-		ResponseResult ret=checkUpdateParam(po);
+	public ResponseResult<PO> update(PO po) {
+		ResponseResult<PO> ret=checkUpdateParam(po);
 		if(!ret.isSuccess()){
 			return ret;
 		}
 		try {
-			int effectRow = (Integer)mapperClass.getMethod("updateByExampleSelective", po.getClass()).invoke(mapper, po);
+			int effectRow = (Integer)mapperClass.getMethod("updateByPrimaryKeySelective", po.getClass()).invoke(mapper, po);
 			return effectRow>0?ResponseResult.createSuccess():ResponseResult.createFail(Constants.RECORD_EXISTS);
 		} catch (Exception e) {
-			ExceptionUtils.rethrow(e);
+			LOGGER.error(ExceptionUtils.getStackTrace(e));
 			return ResponseResult.createFail(e.getMessage());
 		}
 	}
 	
-	public ResponseResult delete(Serializable... ids){
-		ResponseResult ret=checkDeleteParam(ids);
+	public ResponseResult<PO> delete(Serializable... ids){
+		ResponseResult<PO> ret=checkDeleteParam(ids);
 		if(!ret.isSuccess()){
 			return ret;
 		}

@@ -869,6 +869,426 @@ public class SmsIdentifyExample {
             addStatusCriterion("f_status not between", value1, value2, "status");
             return (Criteria) this;
         }
+
+        public Criteria andQueryStatusCodeIsNull() {
+            addCriterion("f_query_status_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeIsNotNull() {
+            addCriterion("f_query_status_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeEqualTo(String value) {
+            addCriterion("f_query_status_code =", value, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeNotEqualTo(String value) {
+            addCriterion("f_query_status_code <>", value, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeGreaterThan(String value) {
+            addCriterion("f_query_status_code >", value, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("f_query_status_code >=", value, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeLessThan(String value) {
+            addCriterion("f_query_status_code <", value, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeLessThanOrEqualTo(String value) {
+            addCriterion("f_query_status_code <=", value, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeLike(String value) {
+            addCriterion("f_query_status_code like", value, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeNotLike(String value) {
+            addCriterion("f_query_status_code not like", value, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeIn(List<String> values) {
+            addCriterion("f_query_status_code in", values, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeNotIn(List<String> values) {
+            addCriterion("f_query_status_code not in", values, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeBetween(String value1, String value2) {
+            addCriterion("f_query_status_code between", value1, value2, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueryStatusCodeNotBetween(String value1, String value2) {
+            addCriterion("f_query_status_code not between", value1, value2, "queryStatusCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverIsNull() {
+            addCriterion("f_receiver is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverIsNotNull() {
+            addCriterion("f_receiver is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverEqualTo(String value) {
+            addCriterion("f_receiver =", value, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverNotEqualTo(String value) {
+            addCriterion("f_receiver <>", value, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverGreaterThan(String value) {
+            addCriterion("f_receiver >", value, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverGreaterThanOrEqualTo(String value) {
+            addCriterion("f_receiver >=", value, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverLessThan(String value) {
+            addCriterion("f_receiver <", value, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverLessThanOrEqualTo(String value) {
+            addCriterion("f_receiver <=", value, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverLike(String value) {
+            addCriterion("f_receiver like", value, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverNotLike(String value) {
+            addCriterion("f_receiver not like", value, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverIn(List<String> values) {
+            addCriterion("f_receiver in", values, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverNotIn(List<String> values) {
+            addCriterion("f_receiver not in", values, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverBetween(String value1, String value2) {
+            addCriterion("f_receiver between", value1, value2, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiverNotBetween(String value1, String value2) {
+            addCriterion("f_receiver not between", value1, value2, "receiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusIsNull() {
+            addCriterion("f_send_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusIsNotNull() {
+            addCriterion("f_send_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusEqualTo(String value) {
+            addCriterion("f_send_status =", value, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusNotEqualTo(String value) {
+            addCriterion("f_send_status <>", value, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusGreaterThan(String value) {
+            addCriterion("f_send_status >", value, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("f_send_status >=", value, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusLessThan(String value) {
+            addCriterion("f_send_status <", value, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusLessThanOrEqualTo(String value) {
+            addCriterion("f_send_status <=", value, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusLike(String value) {
+            addCriterion("f_send_status like", value, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusNotLike(String value) {
+            addCriterion("f_send_status not like", value, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusIn(List<String> values) {
+            addCriterion("f_send_status in", values, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusNotIn(List<String> values) {
+            addCriterion("f_send_status not in", values, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusBetween(String value1, String value2) {
+            addCriterion("f_send_status between", value1, value2, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendStatusNotBetween(String value1, String value2) {
+            addCriterion("f_send_status not between", value1, value2, "sendStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeIsNull() {
+            addCriterion("f_send_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeIsNotNull() {
+            addCriterion("f_send_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeEqualTo(String value) {
+            addCriterion("f_send_time =", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeNotEqualTo(String value) {
+            addCriterion("f_send_time <>", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeGreaterThan(String value) {
+            addCriterion("f_send_time >", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("f_send_time >=", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeLessThan(String value) {
+            addCriterion("f_send_time <", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeLessThanOrEqualTo(String value) {
+            addCriterion("f_send_time <=", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeLike(String value) {
+            addCriterion("f_send_time like", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeNotLike(String value) {
+            addCriterion("f_send_time not like", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeIn(List<String> values) {
+            addCriterion("f_send_time in", values, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeNotIn(List<String> values) {
+            addCriterion("f_send_time not in", values, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeBetween(String value1, String value2) {
+            addCriterion("f_send_time between", value1, value2, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeNotBetween(String value1, String value2) {
+            addCriterion("f_send_time not between", value1, value2, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusIsNull() {
+            addCriterion("f_deliver_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusIsNotNull() {
+            addCriterion("f_deliver_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusEqualTo(String value) {
+            addCriterion("f_deliver_status =", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusNotEqualTo(String value) {
+            addCriterion("f_deliver_status <>", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusGreaterThan(String value) {
+            addCriterion("f_deliver_status >", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("f_deliver_status >=", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusLessThan(String value) {
+            addCriterion("f_deliver_status <", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusLessThanOrEqualTo(String value) {
+            addCriterion("f_deliver_status <=", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusLike(String value) {
+            addCriterion("f_deliver_status like", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusNotLike(String value) {
+            addCriterion("f_deliver_status not like", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusIn(List<String> values) {
+            addCriterion("f_deliver_status in", values, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusNotIn(List<String> values) {
+            addCriterion("f_deliver_status not in", values, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusBetween(String value1, String value2) {
+            addCriterion("f_deliver_status between", value1, value2, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusNotBetween(String value1, String value2) {
+            addCriterion("f_deliver_status not between", value1, value2, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeIsNull() {
+            addCriterion("f_receive_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeIsNotNull() {
+            addCriterion("f_receive_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeEqualTo(String value) {
+            addCriterion("f_receive_time =", value, "receiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeNotEqualTo(String value) {
+            addCriterion("f_receive_time <>", value, "receiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeGreaterThan(String value) {
+            addCriterion("f_receive_time >", value, "receiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("f_receive_time >=", value, "receiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeLessThan(String value) {
+            addCriterion("f_receive_time <", value, "receiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeLessThanOrEqualTo(String value) {
+            addCriterion("f_receive_time <=", value, "receiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeLike(String value) {
+            addCriterion("f_receive_time like", value, "receiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeNotLike(String value) {
+            addCriterion("f_receive_time not like", value, "receiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeIn(List<String> values) {
+            addCriterion("f_receive_time in", values, "receiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeNotIn(List<String> values) {
+            addCriterion("f_receive_time not in", values, "receiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeBetween(String value1, String value2) {
+            addCriterion("f_receive_time between", value1, value2, "receiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTimeNotBetween(String value1, String value2) {
+            addCriterion("f_receive_time not between", value1, value2, "receiveTime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

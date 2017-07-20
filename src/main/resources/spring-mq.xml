@@ -1,0 +1,40 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+    xmlns:jms="http://www.springframework.org/schema/jms"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-4.3.xsd
+		http://www.springframework.org/schema/jms
+        http://www.springframework.org/schema/jms/spring-jms-4.3.xsd
+		http://activemq.apache.org/schema/core
+        http://activemq.apache.org/schema/core/activemq-core-5.14.5.xsd">
+		
+    <amq:connectionFactory id="amqConnectionFactory" brokerURL="tcp://192.168.3.3:61616" userName="" password=""  />
+    <bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+        <property name="targetConnectionFactory" ref="amqConnectionFactory"/>
+        <property name="sessionCacheSize" value="100" />
+    </bean>
+    <util:constant id="smsArrivedQueue" static-field="com.wuwutong.dibai.util.Constants.SMS_ARRIVED_QUERY_QUEUE_NAME"/>
+    <bean id="smsIdentifyQueue" class="org.apache.activemq.command.ActiveMQQueue" c:name-ref="smsArrivedQueue"/>
+    <!-- 配置JMS模板（Queue），Spring提供的JMS工具类，它发送、接收消息。 -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory" />
+        <property name="defaultDestination" ref="smsIdentifyQueue" />
+        <!-- true是topic，false是queue，默认是false，此处显示写出false -->
+        <property name="pubSubDomain" value="false" />
+        <property name="sessionAcknowledgeModeName" value="CLIENT_ACKNOWLEDGE"/>  
+    </bean>
+    <bean id="jmsListenerContainerFactory" class="org.springframework.jms.config.DefaultJmsListenerContainerFactory">
+    	<property name="connectionFactory" ref="connectionFactory"/>
+    	<property name="sessionAcknowledgeMode" value="4"/>
+	</bean>
+    <!-- 默认是使用jmsListenerContainerFactory，所以配置中可以不用指定 -->
+	<jms:annotation-driven/>
+</beans>

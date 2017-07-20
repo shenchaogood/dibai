@@ -13,6 +13,12 @@
     <result column="f_sms_message_sid" jdbcType="CHAR" property="smsMessageSid" />
     <result column="f_status_code" jdbcType="CHAR" property="statusCode" />
     <result column="f_status" jdbcType="TINYINT" property="status" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+    <result column="f_query_status_code" jdbcType="CHAR" property="queryStatusCode" />
+    <result column="f_receiver" jdbcType="CHAR" property="receiver" />
+    <result column="f_send_status" jdbcType="CHAR" property="sendStatus" />
+    <result column="f_send_time" jdbcType="CHAR" property="sendTime" />
+    <result column="f_deliver_status" jdbcType="CHAR" property="deliverStatus" />
+    <result column="f_receive_time" jdbcType="CHAR" property="receiveTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -112,7 +118,8 @@
   </sql>
   <sql id="Base_Column_List">
     f_id, f_to, f_app_id, f_identify_code, f_template_id, f_datas, f_create_time, f_date_created, 
-    f_sms_message_sid, f_status_code, f_status
+    f_sms_message_sid, f_status_code, f_status, f_query_status_code, f_receiver, f_send_status, 
+    f_send_time, f_deliver_status, f_receive_time
   </sql>
   <select id="selectByExample" parameterType="com.wuwutong.dibai.po.SmsIdentifyExample" resultMap="BaseResultMap">
     select
@@ -148,12 +155,16 @@
     insert into t_sms_identify (f_id, f_to, f_app_id, f_identify_code, 
       f_template_id, f_datas, f_create_time, 
       f_date_created, f_sms_message_sid, f_status_code, 
-      f_status
+      f_status, 
+      f_query_status_code, f_receiver, f_send_status, 
+      f_send_time, f_deliver_status, f_receive_time
       )
     values (#{id,jdbcType=BIGINT}, #{to,jdbcType=CHAR}, #{appId,jdbcType=CHAR}, #{identifyCode,jdbcType=CHAR}, 
       #{templateId,jdbcType=VARCHAR}, #{datas,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{dateCreated,jdbcType=TIMESTAMP}, #{smsMessageSid,jdbcType=CHAR}, #{statusCode,jdbcType=CHAR}, 
-      #{status,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+      #{status,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}, 
+      #{queryStatusCode,jdbcType=CHAR}, #{receiver,jdbcType=CHAR}, #{sendStatus,jdbcType=CHAR}, 
+      #{sendTime,jdbcType=CHAR}, #{deliverStatus,jdbcType=CHAR}, #{receiveTime,jdbcType=CHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wuwutong.dibai.po.SmsIdentify">
@@ -192,6 +203,24 @@
       <if test="status != null">
         f_status,
       </if>
+      <if test="queryStatusCode != null">
+        f_query_status_code,
+      </if>
+      <if test="receiver != null">
+        f_receiver,
+      </if>
+      <if test="sendStatus != null">
+        f_send_status,
+      </if>
+      <if test="sendTime != null">
+        f_send_time,
+      </if>
+      <if test="deliverStatus != null">
+        f_deliver_status,
+      </if>
+      <if test="receiveTime != null">
+        f_receive_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -226,6 +255,24 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
+      </if>
+      <if test="queryStatusCode != null">
+        #{queryStatusCode,jdbcType=CHAR},
+      </if>
+      <if test="receiver != null">
+        #{receiver,jdbcType=CHAR},
+      </if>
+      <if test="sendStatus != null">
+        #{sendStatus,jdbcType=CHAR},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=CHAR},
+      </if>
+      <if test="deliverStatus != null">
+        #{deliverStatus,jdbcType=CHAR},
+      </if>
+      <if test="receiveTime != null">
+        #{receiveTime,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -271,6 +318,24 @@
       <if test="record.status != null">
         f_status = #{record.status,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
       </if>
+      <if test="record.queryStatusCode != null">
+        f_query_status_code = #{record.queryStatusCode,jdbcType=CHAR},
+      </if>
+      <if test="record.receiver != null">
+        f_receiver = #{record.receiver,jdbcType=CHAR},
+      </if>
+      <if test="record.sendStatus != null">
+        f_send_status = #{record.sendStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.sendTime != null">
+        f_send_time = #{record.sendTime,jdbcType=CHAR},
+      </if>
+      <if test="record.deliverStatus != null">
+        f_deliver_status = #{record.deliverStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.receiveTime != null">
+        f_receive_time = #{record.receiveTime,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -288,7 +353,13 @@
       f_date_created = #{record.dateCreated,jdbcType=TIMESTAMP},
       f_sms_message_sid = #{record.smsMessageSid,jdbcType=CHAR},
       f_status_code = #{record.statusCode,jdbcType=CHAR},
-      f_status = #{record.status,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+      f_status = #{record.status,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
+      f_query_status_code = #{record.queryStatusCode,jdbcType=CHAR},
+      f_receiver = #{record.receiver,jdbcType=CHAR},
+      f_send_status = #{record.sendStatus,jdbcType=CHAR},
+      f_send_time = #{record.sendTime,jdbcType=CHAR},
+      f_deliver_status = #{record.deliverStatus,jdbcType=CHAR},
+      f_receive_time = #{record.receiveTime,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -326,6 +397,24 @@
       <if test="status != null">
         f_status = #{status,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
       </if>
+      <if test="queryStatusCode != null">
+        f_query_status_code = #{queryStatusCode,jdbcType=CHAR},
+      </if>
+      <if test="receiver != null">
+        f_receiver = #{receiver,jdbcType=CHAR},
+      </if>
+      <if test="sendStatus != null">
+        f_send_status = #{sendStatus,jdbcType=CHAR},
+      </if>
+      <if test="sendTime != null">
+        f_send_time = #{sendTime,jdbcType=CHAR},
+      </if>
+      <if test="deliverStatus != null">
+        f_deliver_status = #{deliverStatus,jdbcType=CHAR},
+      </if>
+      <if test="receiveTime != null">
+        f_receive_time = #{receiveTime,jdbcType=CHAR},
+      </if>
     </set>
     where f_id = #{id,jdbcType=BIGINT}
   </update>
@@ -340,7 +429,13 @@
       f_date_created = #{dateCreated,jdbcType=TIMESTAMP},
       f_sms_message_sid = #{smsMessageSid,jdbcType=CHAR},
       f_status_code = #{statusCode,jdbcType=CHAR},
-      f_status = #{status,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+      f_status = #{status,jdbcType=TINYINT,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
+      f_query_status_code = #{queryStatusCode,jdbcType=CHAR},
+      f_receiver = #{receiver,jdbcType=CHAR},
+      f_send_status = #{sendStatus,jdbcType=CHAR},
+      f_send_time = #{sendTime,jdbcType=CHAR},
+      f_deliver_status = #{deliverStatus,jdbcType=CHAR},
+      f_receive_time = #{receiveTime,jdbcType=CHAR}
     where f_id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

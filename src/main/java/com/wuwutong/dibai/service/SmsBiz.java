@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.wuwutong.dibai.common.ResponseResult;
 import com.wuwutong.dibai.enums.SmsIdentifyCodeStatus;
+import com.wuwutong.dibai.enums.SmsQueryStrategy;
 import com.wuwutong.dibai.mapper.SmsIdentifyMapper;
+import com.wuwutong.dibai.mq.SmsProcesser;
 import com.wuwutong.dibai.po.SmsIdentify;
-import com.wuwutong.dibai.po.SmsTemplate;
 import com.wuwutong.dibai.util.Coder;
 import com.wuwutong.dibai.util.DateTimeUtil;
 import com.wuwutong.dibai.util.HttpClientUtil;
@@ -47,8 +50,12 @@ public class SmsBiz extends BaseBiz<SmsIdentify, SmsIdentifyMapper>{
 	//APP TOKEN
 	@Value("${sms.app_token}")
 	private String appToken;
+	//SOFT VERSION
 	@Value("${sms.soft_version}")
 	private String softVersion;
+	
+	@Autowired
+	private SmsProcesser smsProcesser;
 	
 	
 	@Autowired
@@ -80,15 +87,22 @@ public class SmsBiz extends BaseBiz<SmsIdentify, SmsIdentifyMapper>{
 		return headers;
 	}
 	
+	
+	private Pair<String, Map<String,String>> getUrlAndHeaders(){
+		long currentTime=System.currentTimeMillis();
+		String url=getCommonUrl(currentTime,"TemplateSMS");
+		Map<String,String> headers=generateHttpHeaders(currentTime);
+		return Pair.of(url, headers);
+	}
+	
 	/**
 	 * 
 	 * @param mobile
 	 * @param code
 	 * @return
 	 */
-	public ResponseResult sendIdentifyCode(String mobile, String code) {
-		long currentTime=System.currentTimeMillis();
-		String url=getCommonUrl(currentTime,"TemplateSMS");
+	public ResponseResult<Long> sendIdentifyCode(String mobile, String code) {
+		Pair<String, Map<String,String>> urlHeaders=getUrlAndHeaders();
 		SmsIdentify sms=new SmsIdentify();
 		sms.setId(IDGenerator.generate());
 		sms.setTo(mobile);
@@ -106,10 +120,9 @@ public class SmsBiz extends BaseBiz<SmsIdentify, SmsIdentifyMapper>{
 		json.put("templateId", sms.getTemplateId());
 		json.put("datas", datas);
 		
-		Map<String,String> headers=generateHttpHeaders(currentTime);
-		ResponseResult ret=null;
+		ResponseResult<Long> ret=null;
 		try {
-			HttpResult result = HttpClientUtil.post(url, json.toJSONString(), headers, null);
+			HttpResult result = HttpClientUtil.post(urlHeaders.getLeft(), json.toJSONString(), urlHeaders.getRight(), null);
 			JSONObject response=JSONObject.parseObject(result.content);
 			String statusCode=response.getString("statusCode");
 			sms.setStatusCode(statusCode);
@@ -120,10 +133,11 @@ public class SmsBiz extends BaseBiz<SmsIdentify, SmsIdentifyMapper>{
 					String smsMessageSid=StringUtils.defaultString(templateSMS.getString("smsMessageSid"),"");
 					String dateCreated=StringUtils.defaultString(templateSMS.getString("dateCreated"),"");//yyyyMMddHHmmss
 					sms.setSmsMessageSid(smsMessageSid);
+					smsProcesser.deliverSmsQueryMessage(sms.getId(),DateTimeUtil.format(System.currentTimeMillis(), "yyyyMMdd"),smsMessageSid);
 					if(Pattern.matches("^\\d{14}$", dateCreated)){
 						sms.setDateCreated(DateTimeUtil.parseDate(dateCreated, "yyyyMMddHHmmss"));
 						sms.setStatus(SmsIdentifyCodeStatus.SEND_SUCCESS);
-						ret=ResponseResult.createSuccess().setData(sms.getId());
+						ret=ResponseResult.<Long>createSuccess().setData(sms.getId());
 					}else{
 						LOGGER.info("验证码短信响应时间:{}",dateCreated);
 						sms.setStatus(SmsIdentifyCodeStatus.RESPONSE_DATE_ERROR);
@@ -143,30 +157,68 @@ public class SmsBiz extends BaseBiz<SmsIdentify, SmsIdentifyMapper>{
 		} catch (IOException e) {
 			ret=ResponseResult.createFail(e.getLocalizedMessage());
 		}
-		add(sms);
+		if(!add(sms).isSuccess()){
+			ret.setSuccess(false);
+			ret.setDesc("服务内部错误，请稍后重试");
+		}
 		return ret;
 	}
 	
-	public ResponseResult createTemplate(){
-		long currentTime=System.currentTimeMillis();
-		String url=getCommonUrl(currentTime,"CreateSMSTemplate");
-		Map<String,String> headers=generateHttpHeaders(currentTime);
-		SmsTemplate template=new SmsTemplate();
-		template.setId(IDGenerator.generate());
-		template.setCreateTime(new Date());
-		template.setProductType("");
-//		template.setSignature(signature);
-//		template.setTemplateContent(templateContent);
-//		
-//		JSONObject json=new JSONObject();
-//		json.put("to", sms.getTo());
-//		json.put("appId", sms.getAppId());
-//		json.put("templateId", sms.getTemplateId());
-//		json.put("datas", sms.getDatas());
+	/**
+	 * 
+	 * @param smsIdentifyId
+	 * @param sendDate eg.20150710
+	 * @param msgId
+	 * @return
+	 * @throws IOException
+	 */
+	public ResponseResult<SmsQueryStrategy> querySmsStatus(long smsIdentifyId, String sendDate,String msgId) throws IOException{
+		SmsIdentify sms=findById(smsIdentifyId).getData();
+		if(Objects.isNull(sms)){
+			LOGGER.warn("查无此短信id:{},sendDate:{}",smsIdentifyId,sendDate);
+			return ResponseResult.createFail("无此记录");
+		}
+		if(Objects.equals(sms.getStatus(), SmsIdentifyCodeStatus.SEND_SUCCESS )||Objects.equals(sms.getStatus(), SmsIdentifyCodeStatus.LOST )){
+			return ResponseResult.<SmsQueryStrategy>createSuccess().setData(SmsQueryStrategy.FINISH);
+		}
+		Pair<String, Map<String,String>> urlHeaders=getUrlAndHeaders();
+		JSONObject param=new JSONObject();
+		param.put("date",sendDate);
+		param.put("msgId", msgId);
+		HttpResult result = HttpClientUtil.post(urlHeaders.getLeft(), param.toJSONString(), urlHeaders.getRight(), null);
+		if(result.statusCode!=200){
+			return ResponseResult.<SmsQueryStrategy>createFail("http status code:"+result.statusCode).setData(SmsQueryStrategy.RETRY);
+		}
+		JSONObject response=JSONObject.parseObject(result.content);
+		String statusCode=response.getString("statusCode");
+		String receiver=response.getString("receiver");
+		String sendStatus=response.getString("sendStatus");
+		String sendTime=response.getString("sendtime");
+		String deliverStatus=response.getString("deliverStatus");
+		String receiveTime=response.getString("receivetime");
 		
-		//{"appId":"ff8080813fc70a7b013fc72312324213","productType":"1","addr":"http://yuntongxun","title":"云通讯","signature":"云通讯","templateContent":"云通讯"}
-
-		return null;
+		sms.setQueryStatusCode(statusCode);
+		sms.setReceiver(receiver);
+		sms.setSendStatus(sendStatus);
+		sms.setSendTime(sendTime);
+		sms.setDeliverStatus(deliverStatus);
+		sms.setReceiveTime(receiveTime);
+		
+		switch (statusCode) {
+		case "000000":
+			sms.setStatus(SmsIdentifyCodeStatus.ARRIVED);
+			break;
+		case "112356":
+			sms.setStatus(SmsIdentifyCodeStatus.SEND_SUCCESS);
+			break;
+		case "112351":
+			sms.setStatus(SmsIdentifyCodeStatus.LOST);
+			break;
+		}
+		update(sms);
+		return Arrays.asList(SmsIdentifyCodeStatus.ARRIVED,SmsIdentifyCodeStatus.LOST).contains(sms.getStatus())?
+				ResponseResult.<SmsQueryStrategy>createSuccess().setData(SmsQueryStrategy.FINISH):ResponseResult.<SmsQueryStrategy>createFail().setData(SmsQueryStrategy.RETRY);
+	
 	}
 
 }
