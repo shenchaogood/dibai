@@ -133,7 +133,7 @@ public class SmsBiz extends BaseBiz<SmsIdentify, SmsIdentifyMapper>{
 					String smsMessageSid=StringUtils.defaultString(templateSMS.getString("smsMessageSid"),"");
 					String dateCreated=StringUtils.defaultString(templateSMS.getString("dateCreated"),"");//yyyyMMddHHmmss
 					sms.setSmsMessageSid(smsMessageSid);
-					smsProcesser.deliverSmsQueryMessage(sms.getId(),DateTimeUtil.format(System.currentTimeMillis(), "yyyyMMdd"),smsMessageSid);
+					smsProcesser.deliverSmsQueryMessage(sms);
 					if(Pattern.matches("^\\d{14}$", dateCreated)){
 						sms.setDateCreated(DateTimeUtil.parseDate(dateCreated, "yyyyMMddHHmmss"));
 						sms.setStatus(SmsIdentifyCodeStatus.SEND_SUCCESS);
@@ -172,7 +172,7 @@ public class SmsBiz extends BaseBiz<SmsIdentify, SmsIdentifyMapper>{
 	 * @return
 	 * @throws IOException
 	 */
-	public ResponseResult<SmsQueryStrategy> querySmsStatus(long smsIdentifyId, String sendDate,String msgId) throws IOException{
+	public ResponseResult<SmsQueryStrategy> querySmsStatus(long smsIdentifyId, Date sendDate,String msgId) throws IOException{
 		SmsIdentify sms=findById(smsIdentifyId).getData();
 		if(Objects.isNull(sms)){
 			LOGGER.warn("查无此短信id:{},sendDate:{}",smsIdentifyId,sendDate);
@@ -183,7 +183,7 @@ public class SmsBiz extends BaseBiz<SmsIdentify, SmsIdentifyMapper>{
 		}
 		Pair<String, Map<String,String>> urlHeaders=getUrlAndHeaders();
 		JSONObject param=new JSONObject();
-		param.put("date",sendDate);
+		param.put("date",DateTimeUtil.format(sendDate.getTime(), "yyyyMMdd"));
 		param.put("msgId", msgId);
 		HttpResult result = HttpClientUtil.post(urlHeaders.getLeft(), param.toJSONString(), urlHeaders.getRight(), null);
 		if(result.statusCode!=200){

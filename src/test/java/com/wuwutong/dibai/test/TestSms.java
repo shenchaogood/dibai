@@ -1,6 +1,7 @@
 package com.wuwutong.dibai.test;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +33,7 @@ public class TestSms {
 	
 	@Test
 	public void testQuerySmsStatus() throws IOException{
-		ResponseResult<SmsQueryStrategy> ret=smsBiz.querySmsStatus(337710838255190016L, "20170720", "df257e34709d4021b8bc8ed2afcee277");
+		ResponseResult<SmsQueryStrategy> ret=smsBiz.querySmsStatus(337710838255190016L, new Date(), "df257e34709d4021b8bc8ed2afcee277");
 		LOGGER.debug("{}",ret);
 	}
 	

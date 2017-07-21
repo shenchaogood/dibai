@@ -16,7 +16,7 @@
 		http://activemq.apache.org/schema/core
         http://activemq.apache.org/schema/core/activemq-core-5.14.5.xsd">
 		
-    <amq:connectionFactory id="amqConnectionFactory" brokerURL="tcp://192.168.3.3:61616" userName="" password=""  />
+    <amq:connectionFactory id="amqConnectionFactory" brokerURL="tcp://shenchao.xin:61616" userName="" password=""  />
     <bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
         <property name="targetConnectionFactory" ref="amqConnectionFactory"/>
         <property name="sessionCacheSize" value="100" />

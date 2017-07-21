@@ -2,18 +2,22 @@ create database dibai charset utf8;
 use dibai;
 create table t_user(
 	f_id bigint unsigned not null primary key,
+	f_name varchar(20) not null default '' comment '姓名', 
 	f_identify_code char(4) not null default '' comment '最新有效验证码',
 	f_id_number char(18) not null default '' unique comment '身份证',
 	f_mobile char(11) not null default '' unique comment '最新手机号',
 	f_invitation_code char(6) not null default '' comment '注册时输入的邀请码',
 	f_register_time datetime not null default current_timestamp comment '手机验证时间',
 	f_auth_time datetime not null default '0000-00-00 00:00:00' comment '身份证验证时间',
-	f_auth_status tinyint not null default 0 comment '认证状态0手机认证,1身份证验证,2缴纳押金,3完成认证',
-	f_use_status tinyint not null default 0 comment '使用状态0未使用1正在使用',
-	f_use_count int not null default 0 comment '骑行次数',
+	f_auth_status tinyint unsigned not null default 0 comment '认证状态0手机认证,1身份证验证,2缴纳押金,3完成认证',
+	f_use_status tinyint unsigned not null default 0 comment '使用状态0未使用1正在使用',
+	f_use_count int unsigned not null default 0 comment '骑行次数',
 	f_balance int not null default 0 comment '余额，单位分',
-	f_discount_coupon int not null default 0 comment '有效折扣券数量',
-	f_credit int not null default 100 comment '信誉积分',
+	f_discount_coupon int unsigned not null default 0 comment '有效折扣券数量',
+	f_credit int unsigned not null default 100 comment '信誉积分',
+	f_gender tinyint unsigned not null dafault 0 comment '性别 0男 1女',
+	f_deposit int unsigned not null default 0 comment '押金，单位分',
+	f_pay_channel tinyint unsigned not null default 0 comment '支付渠道0支付宝1微信2银联',
 	index idx_register_time(f_register_time),
 	index idx_auth_time(f_auth_time),
 	index idx_balance(f_balance)
@@ -58,3 +62,32 @@ create table t_sms_template(
 	index idx_create_time(f_create_time),
 	index idx_response_time(f_response_time)
 );
+
+create table f_deposit_record(
+	f_id bigint unsigned not null primary key,
+	f_user_id bigint unsigned not null default 0 comment '用户ID',
+	f_trade_type tinyint unsigned not null default 0 comment '交易类型0充值 1退款',
+	f_pay_channel tinyint unsigned not null default 0 comment '押金渠道0支付宝1微信2银联',
+	f_amount int unsigned not null default 0 comment '押金或退款，单位分',
+	f_trade_type tinyint unsigned not null default 0 comment '交易状态0创建1进行中2成功3失败',
+	f_account_id varchar(50) not null default '' comment '客户交易账号',
+	f_trade_instruction char(28) not null default '' unique comment '交易流水号',
+	f_create_time datetime not null default current_timestamp comment '交易开始时间',
+	f_end_time datetime not null default '0000-00-00 00:00:00' comment '交易关闭时间',
+	index idx_user_id(f_user_id),
+	index idx_end_time(f_end_time),
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
